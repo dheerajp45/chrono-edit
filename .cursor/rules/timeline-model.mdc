@@ -1,0 +1,27 @@
+---
+description: ChronoEdit timeline + version control domain model
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Timeline & version model
+
+The user is learning this domain — keep names boring and comments short when a concept is interview-critical (split, overlap, three-way merge).
+
+## Units & media
+- Time: prefer **seconds** (number) for HTML5 video sync in v1; document if switching to frames
+- MediaAsset: id, name, type, objectUrl (ephemeral — lost on refresh; intentional in early phases)
+- Never version media bytes in v1 — version the timeline JSON that references assets
+
+## Clips & tracks
+- TimelineClip: id, assetId, trackId, timelineStart, trimStart, trimEnd
+- Split = two clips, same assetId, adjusted trims — never duplicate media bytes
+- Move = change timelineStart (and optionally trackId) only
+
+## Versions & merge
+- Version = named timeline snapshot + optional parentVersionId(s)
+- Diff = clip ops: add | remove | trim | move | replace
+- Conflict / Overlap = same trackId + overlapping time range changed on both sides since common base
+- Merge: auto-merge non-overlaps; surface Overlaps in UI (Keep yours / Keep theirs / split)
+- Do not silently last-write-wins the whole timeline
+- Do not use CRDT auto-merge as a substitute for Overlap UX when combining Versions

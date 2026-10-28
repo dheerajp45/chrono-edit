@@ -1,0 +1,54 @@
+---
+description: ChronoEdit project rules — phases, learning, no full-app dumps
+alwaysApply: true
+---
+
+# ChronoEdit (Vi-Git)
+
+Personal prototype + solution wedge for Cardboard.ai hard problem #10 (video version control) and a thin slice of #02 (collaboration). Browser agentic NLE context; we are NOT building a full editor.
+
+## About the builder (IMPORTANT)
+
+The user is **learning while building** this project. They want to understand architecture deeply enough to explain it in interviews (YC / startup / backend / state-management stories).
+
+Agents MUST:
+- Build **one phase at a time** and teach as they go
+- After each phase: explain **what** was built, **why** those choices, and **how** to talk about it in an interview (short, plain language)
+- Prefer small, readable files over clever one-liners
+- When something is deferred (Postgres, Yjs, WebCodecs), say why — so the user learns tradeoffs
+- Never dump the entire app in one shot — that destroys the learning loop
+
+## What we are building
+- Timeline-as-JSON (composition / EDL), not pixel/video encoding
+- Workspace with Versions (not git jargon in the UI)
+- Semantic diff + three-way merge + Overlap resolve (time × track)
+- Local media via URL.createObjectURL — no WebCodecs/FFmpeg unless explicitly requested
+- Agent is just another version producer ("Simulate AI Edit")
+
+## What we are NOT building (unless user asks)
+- Full Premiere-like effects, color, motion graphics
+- Server-side transcoding, proxy pipelines
+- Replacing semantic merge with "Yjs means no conflicts"
+- Monolithic 1000-line dumps of the whole app
+
+## Phase discipline (CRITICAL)
+1. Build ONE phase at a time from `info.md`
+2. Do NOT generate the entire app at once
+3. At end of each phase: STOP, explain architecture in interview-friendly language, ASK permission before next phase
+4. Prefer small files: types, store, components, merge engine separated
+
+## Product language (UI copy)
+- Prefer: **Your cut**, **Save new**, **Update last save**, **AI edit** (in place), **Undo** / **Keep** (unsaved)
+- Undo = restore unsaved working batch on Your cut — NOT open a Takes save
+- AI does not create a separate take; no “Demo AI” button — one AI edit is enough
+- Avoid in UI: commit, branch, checkout, HEAD, rebase, PR, merge, Main, pin, conflict (OK in code comments)
+
+## Stack defaults
+- Next.js App Router, React, TypeScript, Tailwind, Zustand
+- DnD: @dnd-kit only (not react-beautiful-dnd)
+- Persistence: in-memory + optional JSON export first; Prisma/Postgres only when user starts that phase
+- Yjs only in Phase 6+, scoped to live editing of ONE version — never as substitute for merge/overlap UX
+
+## Source of truth
+- Read and follow `info.md` roadmap. If code and info.md disagree, ask the user which to update.
+- After finishing a phase, remind the user to mark it complete in `info.md` §8.
